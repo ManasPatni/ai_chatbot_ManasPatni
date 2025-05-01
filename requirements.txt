@@ -1,11 +1,6 @@
-numpy
-PyPDF2
 langchain
-chromadb
-streamlit
-groq
-langchain_community
+langchain_huggingface
 langchain_groq
 sentence-transformers
-pysqlite3-binary 
-torch
+chromadb
+streamlit
