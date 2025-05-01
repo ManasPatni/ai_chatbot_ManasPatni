@@ -1,15 +1,19 @@
 # ai_chatbot_ManasPatni
+
 **Project Overview**
 This project implements an AI chatbot interface based on the personality of Manas Patni. The chatbot leverages advanced natural language processing (NLP) techniques to interact with users, providing responses based on pre-trained language models and a knowledge base.
+
 **Features**
 1.Interactive Chat Interface: Users can interact with the AI chatbot by entering text queries.
 2.Chat History Display: Session-based chat history is displayed to users, showing both user inputs and AI responses.
 3.AI Personality: The chatbot's responses are tailored to emulate the personality traits associated with Manas Patni.
 4.Integration with External Databases: Utilizes ChromaDB for storing and querying vector representations of chatbot interactions.
+
 **Setup Instructions**
 -> Prerequisites
         1.Python 3.6+
         2.pip (Python package installer)
+
 **Installation**
 **1.Clone the repository:**
 git clone [https://github.com/your/repository.git](https://github.com/ManasPatni/ai_chatbot_ManasPatni)
