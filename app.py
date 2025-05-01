@@ -1,10 +1,5 @@
 import sys
-import pysqlite3
-sys.modules["sqlite3"] = sys.modules.pop("pysqlite3")
 import streamlit as st
-import json
-import os
-import subprocess
 from langchain.schema import HumanMessage, SystemMessage
 from langchain.memory import ConversationBufferMemory
 from langchain_huggingface import HuggingFaceEmbeddings
@@ -12,22 +7,12 @@ from langchain_groq import ChatGroq
 from sentence_transformers import SentenceTransformer
 import chromadb
 
-# Auto-install missing dependencies
-def install_package(package):
-    try:
-        __import__(package)
-    except ModuleNotFoundError:
-        subprocess.check_call([sys.executable, "-m", "pip", "install", package])
-
 # Ensure necessary libraries are installed
-install_package("langchain")
-install_package("langchain_huggingface")
-install_package("langchain_groq")
-install_package("sentence-transformers")
-install_package("chromadb")
-
-# Reset Memory on Refresh
-memory = []
+try:
+    import pysqlite3
+    sys.modules["sqlite3"] = sys.modules.pop("pysqlite3")
+except ModuleNotFoundError:
+    pass
 
 # Initialize Models
 embedding_model = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
@@ -51,7 +36,7 @@ def query_llama3(user_query):
         response = chat.invoke(messages)
         
         # Save conversation in session memory (disappears on refresh)
-        memory.append({"input": user_query, "output": response.content})
+        st.session_state.memory.append({"input": user_query, "output": response.content})
         
         return response.content
     except Exception as e:
@@ -62,11 +47,15 @@ def main():
     st.title("AI Chatbot Based on Manas Patni")
     st.markdown("Welcome to the AI chatbot interface. Ask a question to get started!")
     
+    # Initialize session memory if not already initialized
+    if "memory" not in st.session_state:
+        st.session_state.memory = []
+
     # Display Chat History for the Session Only
     st.markdown("### Chat History")
     
-    if memory:
-        for chat in memory:
+    if st.session_state.memory:
+        for chat in st.session_state.memory:
             st.markdown(
                 f"""
                 <div style='display: flex; justify-content: flex-start; margin-bottom: 10px;'>
