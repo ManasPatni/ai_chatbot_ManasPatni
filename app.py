@@ -1,4 +1,7 @@
 import sys
+import pysqlite3
+sys.modules["sqlite3"] = sys.modules.pop("pysqlite3")
+
 import streamlit as st
 from langchain.schema import HumanMessage, SystemMessage
 from langchain.memory import ConversationBufferMemory
@@ -8,11 +11,13 @@ from sentence_transformers import SentenceTransformer
 import chromadb
 
 # SQLite patching (needed for ChromaDB if using pysqlite3 instead of sqlite3)
+# Ensure necessary libraries are installed
 try:
     import pysqlite3
     sys.modules["sqlite3"] = sys.modules.pop("pysqlite3")
 except ModuleNotFoundError:
     pass
+
 
 # Initialize Models
 embedding_model = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
