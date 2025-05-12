@@ -1,7 +1,7 @@
-streamlit==1.35.0
-langchain==0.1.66
-langchain-community==0.0.37
-langchain-huggingface==0.0.6
-langchain-groq==0.0.4
-sentence-transformers==2.7.0
-chromadb==0.4.24
+streamlit
+langchain
+langchain-community
+langchain-huggingface
+langchain-groq
+sentence-transformers
+chromadb
