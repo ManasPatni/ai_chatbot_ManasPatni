@@ -5,3 +5,4 @@ langchain-huggingface
 langchain-groq
 sentence-transformers
 chromadb
+pysqlite3
