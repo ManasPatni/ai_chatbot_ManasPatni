@@ -1,3 +1,6 @@
+import sys
+import pysqlite3
+sys.modules["sqlite3"] = sys.modules.pop("pysqlite3")
 import streamlit as st
 from langchain.schema import HumanMessage, SystemMessage
 from langchain.memory import ConversationBufferMemory
@@ -6,13 +9,16 @@ from langchain_groq import ChatGroq
 from sentence_transformers import SentenceTransformer
 import chromadb
 
+# Ensure necessary libraries are installed
+try:
+    import pysqlite3
+    sys.modules["sqlite3"] = sys.modules.pop("pysqlite3")
+except ModuleNotFoundError:
+    pass
+
 # Initialize Models
 embedding_model = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
-chat = ChatGroq(
-    temperature=0.7,
-    model_name="llama3-70b-8192",
-    groq_api_key="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"
-)
+chat = ChatGroq(temperature=0.7, model_name="llama3-70b-8192", groq_api_key="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")
 semantic_model = SentenceTransformer('all-MiniLM-L6-v2')
 
 # Initialize ChromaDB
@@ -30,9 +36,10 @@ def query_llama3(user_query):
 
     try:
         response = chat.invoke(messages)
-
+        
         # Save conversation in session memory (disappears on refresh)
         st.session_state.memory.append({"input": user_query, "output": response.content})
+        
         return response.content
     except Exception as e:
         return f"⚠️ API Error: {str(e)}"
@@ -41,14 +48,14 @@ def query_llama3(user_query):
 def main():
     st.title("AI Chatbot Based on Manas Patni")
     st.markdown("Welcome to the AI chatbot interface. Ask a question to get started!")
-
+    
     # Initialize session memory if not already initialized
     if "memory" not in st.session_state:
         st.session_state.memory = []
 
     # Display Chat History for the Session Only
     st.markdown("### Chat History")
-
+    
     if st.session_state.memory:
         for chat in st.session_state.memory:
             st.markdown(
@@ -73,7 +80,7 @@ def main():
     user_query = st.text_input("Enter your question:")
     if user_query:
         response = query_llama3(user_query)
-
+        
         st.markdown(
             f"""
             <div style='display: flex; justify-content: flex-start; margin-bottom: 10px;'>
