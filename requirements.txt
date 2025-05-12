@@ -6,3 +6,4 @@ langchain-groq
 langchain-huggingface 
 chromadb==0.4.24 
 PyPDF
+pysqlite3 
